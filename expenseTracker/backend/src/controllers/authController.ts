@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 
-import { PrismaClient } from '../../dist/generated/prisma/client.js'
+import { PrismaClient } from '../../dist/generated/prisma/client'
 
 
 import { loginSchema,signupSchema } from "../validation/userValidation";
@@ -23,8 +23,9 @@ if(!JWT_KEY){
           const existingUser = await client.user.findUnique({where: {email}});
            
           if(existingUser){
-            res.status(404).json({
-                message: "User is already register !"
+            
+            return res.status(404).json({
+                message: "User is already registered!"
             })
           }
 

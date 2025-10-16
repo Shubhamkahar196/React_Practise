@@ -13,7 +13,6 @@ app.use(express.json());
 
 app.use("/api/v1/auth",authRoute)
 app.use("/api/v1/expense",expenseRoute)
-hsf k s
 
 
 app.listen(PORT,()=>{
