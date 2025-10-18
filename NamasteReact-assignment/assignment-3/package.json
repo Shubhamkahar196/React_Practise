@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "parcel": "^2.16.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "name": "assignment-3",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+"start" : "parcel index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
