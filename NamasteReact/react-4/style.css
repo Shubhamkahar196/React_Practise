@@ -43,3 +43,9 @@
 .search-container{
     margin: 10px 10px;
 }
+
+.filter-btn{
+padding: 5px;
+border-radius: 5px;
+cursor: pointer;
+}
