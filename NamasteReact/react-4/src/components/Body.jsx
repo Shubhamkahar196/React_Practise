@@ -23,10 +23,11 @@ const Body = ()=>{
       );
 
       const json = data.data;
-      console.log(json);
-      // optional chaining
-      // SetListRes(json.data?.card?.[2]?.data?.data?.cards || [])
-      SetListRes( json?.data?.card[2]?.data?.data?.cards || []);
+      console.log('Full response:', json);
+      console.log('Data:', json?.data);
+      // Based on API response, cards are directly in data
+      const cards = json?.data?.cards || [];
+      SetListRes(cards);
 
 
 
@@ -69,9 +70,10 @@ const Body = ()=>{
 
             <div className="res-container">
 
-               {(filteredRes.length > 0 ? filteredRes : listRes).map((restaurant) => (
-                   <RestaurantCard key={restaurant.data.id} resData={restaurant.data} />
-               ))}
+
+              {filteredRes.map((res)=>(
+                <RestaurantCard key={restaurant.data.id} resData={restaurant}/>
+              ))}
 
 
             </div>
@@ -81,3 +83,8 @@ const Body = ()=>{
 }
 
 export default Body
+
+
+
+
+
