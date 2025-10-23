@@ -9,9 +9,11 @@ const Body = () => {
   const [searchtext, setSearchtext] = useState("");
   const [filteredRes, setFilteredRes] = useState([]);
 
+ 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(); 
+    
+  },[]);
 
   const fetchData = async () => {
     const data = await axios.get(
