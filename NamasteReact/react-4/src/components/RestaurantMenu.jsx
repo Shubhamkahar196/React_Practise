@@ -1,52 +1,149 @@
-import {useEffect, useState} from 'react'
-import axios from 'axios';
-import Shimmer from './Shimmer';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Shimmer from "./Shimmer";
+import { useParams } from "react-router-dom";
+import { MENU_ITEM } from "../utils/constant";
 
-const RestaurantMenu = () =>{
-const [restInfo, setRestInfo] = useState(null);
+const RestaurantMenu = () => {
+  const [resInfo, setResInfo] = useState(null);
+  const { resId } = useParams();
 
-    useEffect(()=>{
-        fetchMenu();
-        
-    },[])  
+  useEffect(() => {
+    fetchMenu();
+  }, []);
 
-    const fetchMenu = async () =>{
-        const data = await axios.get("https://corsproxy.io/https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=28.98340&lng=77.70600&restaurantId=386420&catalog_qa=undefined&submitAction=ENTER%20Request%20Method%20GET")
-        
-        const json = await data.data;
+  const fetchMenu = async () => {
+    const data = await axios.get(MENU_ITEM + resId);
+    const json = data.data;
+    console.log("FULL API:", json);
+    setResInfo(json.data);
+  };
 
-        console.log(json);
-        setRestInfo(json.data)
-    }
-       
-    if(restInfo === null) return <Shimmer/>
+  if (!resInfo) return <Shimmer />;
 
-    // const restaurantName = restInfo?.cards[0]?.card?.card?.info?.name || "Restaurant Name";
+  // ✅ Dynamically find restaurant info card
+  const infoCard = resInfo.cards.find(
+    (card) => card.card?.card?.info
+  );
+  const { name, cuisines, costForTwoMessage } = infoCard.card.card.info;
 
-    const {name,cuisines,costForTwoMessage} = restInfo?.cards[0]?.card?.card?.info
+  // ✅ Dynamically find menu itemCards — not recommended items
+  const regularCards =
+    resInfo.cards.find((c) => c.groupedCard)?.groupedCard
+      ?.cardGroupMap?.REGULAR?.cards;
 
-    // Extract menu items from the grouped cards
-    // const menuItems = [];
-    // const groupedCards = restInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards || [];
-    // groupedCards.forEach(group => {
-    //     if (group?.card?.card?.itemCards) {
-    //         group.card.card.itemCards.forEach(item => {
-    //             menuItems.push(item.card.info.name);
-    //         });
-    //     }
-    // });
+  const menuCard = regularCards.find(
+    (c) => c.card?.card?.itemCards // ✅ Only menu items
+  );
 
-    return  (
-        <div>
-            <h1>{name}</h1>
-            <h2>Menu</h2>
-            <ul>
-                {menuItems.map((item, index) => (
-                    <li key={index}>{item}</li>
-                ))}
-            </ul>
-        </div>
-    )
-}
+  const itemCards = menuCard?.card?.card?.itemCards || [];
+
+  console.log("MENU ITEMS:", itemCards);
+
+  return (
+    <div>
+      <h1>{name}</h1>
+      <h3>{cuisines?.join(", ")}</h3>
+      <p>{costForTwoMessage}</p>
+
+      <h2>Menu</h2>
+      <ul>
+        {itemCards.map((item) => (
+          <li key={item.card.info.id}>
+            {item.card.info.name} - ₹
+            {(item.card.info.price || item.card.info.defaultPrice) / 100}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 export default RestaurantMenu;
+
+
+// import { useEffect, useState } from "react";
+// import axios from "axios";
+// import Shimmer from "./Shimmer";
+// import { useParams } from "react-router-dom";
+// import { MENU_ITEM } from "../utils/constant";
+
+// const RestaurantMenu = () => {
+//   const [resInfo, setResInfo] = useState(null);
+//   const { resId } = useParams();
+
+//   useEffect(() => {
+//     fetchMenu();
+//   }, []);
+
+//   const fetchMenu = async () => {
+//     try {
+//       const { data } = await axios.get(MENU_ITEM + resId);
+//       console.log("FULL API:", data);
+//       setResInfo(data?.data);
+//     } catch (error) {
+//       console.error("API FETCH ERROR:", error);
+//     }
+//   };
+
+//   if (!resInfo) return <Shimmer />;
+
+//   // ✅ Find Restaurant Info dynamically
+//   const restaurantInfoCard = resInfo.cards?.find(
+//     (card) =>
+//       card.card?.card?.["@type"] ===
+//       "type.googleapis.com/swiggy.presentation.food.v2.Restaurant"
+//   );
+
+//   const { name, cuisines, costForTwoMessage } =
+//     restaurantInfoCard?.card?.card?.info || {};
+
+//   // ✅ Find REGULAR group (all menu categories)
+//   const regularGroupCard = resInfo.cards?.find((card) => card.groupedCard)
+    // ?.groupedCard?.cardGroupMap?.REGULAR;
+
+//   // ✅ Collect all menu items across all categories
+//   const itemCards = regularGroupCard?.cards
+//     ?.flatMap((cat) => {
+//       const type = cat.card?.card?.["@type"];
+//       // Only ItemCategory or NestedItemCategory contains menu items
+//       if (
+//         type ===
+//           "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory" ||
+//         type ===
+//           "type.googleapis.com/swiggy.presentation.food.v2.NestedItemCategory"
+//       ) {
+//         if (cat.card.card.itemCards) return cat.card.card.itemCards;
+//         if (cat.card.card.categories)
+//           return cat.card.card.categories.flatMap((c) => c.itemCards || []);
+//       }
+//       return [];
+//     }) || [];
+
+//   console.log("MENU ITEMS:", itemCards);
+
+//   return (
+//     <div>
+//       <h1>{name || "Restaurant Name Not Found"}</h1>
+//       <h3>{cuisines?.join(", ") || "Cuisines Not Found"}</h3>
+//       <p>{costForTwoMessage || ""}</p>
+
+//       <h2>Menu</h2>
+//       <ul>
+//         {itemCards.length > 0 ? (
+//           itemCards.map((item) => (
+//             <li key={item.card.info.id}>
+//               {item.card.info.name} - ₹
+//               {(item.card.info.price || item.card.info.defaultPrice) / 100}
+//             </li>
+//           ))
+//         ) : (
+//           <p>No menu items available</p>
+//         )}
+//       </ul>
+//     </div>
+//   );
+// };
+
+// export default RestaurantMenu;
+
