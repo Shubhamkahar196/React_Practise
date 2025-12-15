@@ -11,9 +11,16 @@ class UserClass extends React.Component{
             count:0,
             count2:2
         }
+      console.log("Child constructor")
+    }
+
+    componentDidMount(){
+        console.log("Child mount")
     }
 
     render(){
+
+        console.log("Child render")
         // destructuring
         const {count} = this.state;
         return (
