@@ -18,10 +18,9 @@ const Body = () => {
   },[]);
 
   const fetchData = async () => {
-    const data = await axios.get(
-      "https://corsproxy.io/https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.98340&lng=77.70600&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+    const data = await axios.get("https://corsproxy.io/https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.98340&lng=77.70600&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
       // "https://www.swiggy.com/restaurants",
-    );
+);
 
     const json = await data.data;
 
@@ -53,10 +52,11 @@ const Body = () => {
   return listRes.length === 0 ? (
     <Shimmer />
   ) : (
-    <div className="body">
-      <div className="search-container">
+    <div className="">
+      <div className="ml-50 mb-5">
         <input
-          className="search"
+          className="border border-gray-300 p-2 rounded-lg 
+         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           placeholder="type something here.."
           value={searchtext}
           onChange={(e) => {
@@ -64,7 +64,7 @@ const Body = () => {
           }}
         />
         <button
-          className="search-btn"
+          className="px-2 ml-3 mr-3 border bg-blue-400 rounded-lg hover:bg-zinc-500"
           onClick={() => {
             // filter the restaurant cards and update the UI
             // searchtext
@@ -80,7 +80,7 @@ const Body = () => {
         </button>
 
         <button
-          className="filter-btn"
+          className="px-2 ml-3 mr-3 border bg-zinc-400 rounded-lg hover:bg-blue-500"
           onClick={() => {
             const filterList = listRes.filter((res) => res.info.avgRating > 4);
             setFilteredRes(filterList);
@@ -90,7 +90,7 @@ const Body = () => {
         </button>
       </div>
 
-      <div className="res-container">
+      <div className="flex flex-wrap">
         {filteredRes.map((res) => (
          <Link  key={res.info.id} to={"/restaurant/" + res.info.id}>
          <RestaurantCard key={res.info.id} resData={res} />
