@@ -4,6 +4,7 @@ import Shimmer from "./Shimmer";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import { WithPromtedLabel } from "./RestaurantCard";
 
 const Body = () => {
   // local  state variable - super powerful variable
@@ -11,10 +12,10 @@ const Body = () => {
   const [searchtext, setSearchtext] = useState("");
   const [filteredRes, setFilteredRes] = useState([]);
 
- 
+ const RestaurantCardPromoted = WithPromtedLabel(RestaurantCard);
   useEffect(() => {
-    fetchData(); 
-    
+    fetchData();
+
   },[]);
 
   const fetchData = async () => {
@@ -22,7 +23,7 @@ const Body = () => {
       // "https://www.swiggy.com/restaurants",
 );
 
-    const json = await data.data;
+    const json = data.data;
 
 
 
@@ -55,7 +56,7 @@ const Body = () => {
     <div className="">
       <div className="ml-50 mb-5">
         <input
-          className="border border-gray-300 p-2 rounded-lg 
+          className="border border-gray-300 p-2 rounded-lg
          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           placeholder="type something here.."
           value={searchtext}
@@ -93,8 +94,12 @@ const Body = () => {
       <div className="flex flex-wrap">
         {filteredRes.map((res) => (
          <Link  key={res.info.id} to={"/restaurant/" + res.info.id}>
-         <RestaurantCard key={res.info.id} resData={res} />
-         </Link> 
+          {/* here promoted use */}
+          {res.info.promoted ? (
+            <RestaurantCardPromoted resData={res} />
+          ):  <RestaurantCard resData={res} /> }
+
+         </Link>
         ))}
       </div>
     </div>
