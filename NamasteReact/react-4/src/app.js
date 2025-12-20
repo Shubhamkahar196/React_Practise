@@ -12,7 +12,9 @@ import RestaurantMenu from "./components/RestaurantMenu";
 import Grocery from "./components/Grocery";
 import Shimmer from "./components/Shimmer";
 import userContext from "./utils/userContext";
-
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
+import Cart from "./components/cart";
 // lazy loading -> import 
 
 const Grocery = lazy(()=> import("./components/Grocery"));
@@ -24,7 +26,7 @@ const AppLayout = () => {
   const [userName, setUserName] = useState()
   
   return (
-    
+     <Provider store={appStore}>   //redux store
       <userContext.Provider value={{loggedInUser: userName, setUserName}}>
       <div className="app">
       {/* Header */}
@@ -33,6 +35,7 @@ const AppLayout = () => {
       </div>
 
       </userContext.Provider>
+      </Provider>
     
     
   );
@@ -62,6 +65,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/restaurant/:restid",    //making a dynamically route
         element: <RestaurantMenu/>
+      },
+      {
+        path: "/cart",    //making a dynamically route
+        element: <Cart/>
       }
     ],
     errorElement: <Error />,

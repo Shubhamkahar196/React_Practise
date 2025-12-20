@@ -3,6 +3,7 @@ import { LOGO } from "../utils/constant"
 import { Link } from "react-router-dom"
 import useOnlineStatus from "../utils/useOnlineStatus"
 import userContext from "../utils/userContext"
+import { useSelector } from "react-redux"
 const Header = () =>{
       
 
@@ -13,6 +14,12 @@ console.log("Header  called")
 // context
 
 const {loggedInUser} = useContext(userContext);
+
+
+// selector - it is basically a hook and 
+// this is subscribing to the store
+
+const  cartItems = useSelector((store)=> store.cart.items);
 
 // if no dependency array => useEffect is called on every render
 // if dependency array is empty = [] => useEffect is called on initial render(just once)
@@ -44,7 +51,9 @@ useEffect(()=>{
     <li className="hover:bg-gray-500 hover:text-xl font-semibold rounded-xl  ">
         <Link to='/grocery'>Grocery</Link>
     </li>
-    <li className="hover:bg-gray-500 hover:text-xl font-semibold rounded-xl  ">Cart</li>
+    <li className="hover:bg-gray-500 hover:text-xl font-semibold rounded-xl  ">
+        <Link to='/cart'>Cart-({cartItems.length} items)</Link>
+        </li>
   
 
     <button className="hover:bg-gray-500 hover:text-xl font-semibold rounded-xl  "onClick={()=>{

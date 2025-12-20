@@ -1,6 +1,18 @@
+import { useDispatch } from "react-redux";
 import { RES_CARD_LOGO } from "../utils/constant";
+import { addItem } from "../utils/cartSlice";
 
 const ItemList = ({ items, dummy }) => {
+
+
+  // dispatcher 
+
+  const dispatch = useDispatch();
+
+  const handleAddItem = ()=>{
+    //dispatch a action
+    dispatch(addItem("pizza"));
+  }
 
   return (
     <div>
@@ -23,7 +35,7 @@ const ItemList = ({ items, dummy }) => {
           </div>
           <div className="w-3/12 p-4">
             <div className="absolute">
-              <button className="p-2 ml-6 mt-[70px] rounded-lg bg-black text-white shadow-lg hover:bg-white  hover:text-black transition-all duration-[.3s]">
+              <button onClick={handleAddItem} className="p-2 ml-6 mt-[70px] rounded-lg bg-black text-white shadow-lg hover:bg-white  hover:text-black transition-all duration-[.3s]">
                 Add +
               </button>
             </div>
