@@ -2,6 +2,7 @@ import { RES_CARD_LOGO } from "../utils/constant"
 
 const RestaurantCard = (props) =>{
 const {resData} = props
+console.log(resData)
        return(
         <div className="m-4 p-4 w-62.5 bg-zinc-400 rounded-2xl">
             <img className="rounded-2xl" src={RES_CARD_LOGO + resData.info.cloudinaryImageId}  alt="logo"/>

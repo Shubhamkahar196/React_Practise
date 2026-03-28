@@ -68,3 +68,20 @@ test("Should change Login Button to Logout on Click",()=>{
     expect(logoutButton).toBeInTheDocument()
     
 })
+
+test("Should load Header components About us",()=>{
+    render(
+    <BrowserRouter>
+    <Provider store={appStore}>
+ <Header/>
+    </Provider>
+    </BrowserRouter>
+    )
+      
+    const aboutUs = screen.getByText(/About us/)
+
+    
+
+    expect(aboutUs).toBeInTheDocument()
+    
+})
